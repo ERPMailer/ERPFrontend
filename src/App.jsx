@@ -4,12 +4,14 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { routes } from './routes/routes';
+import Navbar from './components/navbar/navbar';
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
+     <Navbar />
        <Router>
         <Routes>
           {routes.map(({ path, element }, index) => (
