@@ -24,6 +24,9 @@
     "lucide-react": "^0.511.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-dropzone": "^14.3.8",
+    "react-easy-crop": "^5.4.2",
+    "react-quill": "^2.0.0",
     "react-router-dom": "^7.6.0",
     "tailwind-merge": "^3.3.0",
     "tailwindcss": "^4.1.7"
