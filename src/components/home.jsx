@@ -86,11 +86,11 @@ const Home = ({ toggleTheme, isDarkMode = false }) => {
       newErrors.email = "Please enter a valid email address";
     }
 
-    if (!formData.password.trim()) {
-      newErrors.password = "Password is required";
-    } else if (formData.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
-    }
+    // if (!formData.password.trim()) {
+    //   newErrors.password = "Password is required";
+    // } else if (formData.password.length < 6) {
+    //   newErrors.password = "Password must be at least 6 characters";
+    // }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -108,30 +108,18 @@ const Home = ({ toggleTheme, isDarkMode = false }) => {
 
     try {
       // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      const response = await axiosInstance.post(`/login`, formData);
 
-      // Simulate login logic
-      if (
-        formData.email === "demo@erpmailer.com" &&
-        formData.password === "password"
-      ) {
-        setAlert({
-          type: "success",
-          message: "Login successful! Redirecting to dashboard...",
-        });
+      setAlert({
+        type: "success",
+        message: "Login successful! Redirecting to dashboard...",
+      });
 
-        // Simulate redirect after success
-        setTimeout(() => {
-          console.log("Redirecting to dashboard...");
-          // window.location.href = '/dashboard';
-        }, 1500);
-      } else {
-        setAlert({
-          type: "error",
-          message:
-            "Invalid email or password. Try demo@erpmailer.com / password",
-        });
-      }
+      // Simulate redirect after success
+      setTimeout(() => {
+        navigate(`/create-template`);
+        // window.location.href = '/dashboard';
+      }, 1500);
     } catch (error) {
       setAlert({
         type: "error",
@@ -162,7 +150,16 @@ const Home = ({ toggleTheme, isDarkMode = false }) => {
 
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-      // const createUser = await  axiosInstance.post(`/user/create-user`)
+      const createUser = await axiosInstance.post(
+        `/users/create-user`,
+        {},
+        {
+          headers: {
+            token: user.accessToken,
+          },
+          withCredentials: true,
+        }
+      );
       console.log("Logged in as:", user);
       navigate("/create-template");
     } catch (err) {

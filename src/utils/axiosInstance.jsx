@@ -15,5 +15,6 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+axiosInstance.defaults.withCredentials = true;
 
 export default axiosInstance;
