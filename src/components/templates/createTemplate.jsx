@@ -52,6 +52,7 @@ import {
   Info as InfoIcon,
 } from "@mui/icons-material";
 import Cropper from "react-easy-crop";
+import axiosInstance from "../../utils/axiosInstance";
 
 function EmailTemplateBuilder() {
   const theme = useTheme();
@@ -509,7 +510,7 @@ function EmailTemplateBuilder() {
   };
 
   // Save template
-  const saveTemplate = () => {
+  const saveTemplate = async () => {
     if (!validateForm()) {
       setSnackbarMessage("Please fix the errors before saving");
       setShowSnackbar(true);
@@ -531,9 +532,12 @@ function EmailTemplateBuilder() {
         size: att.size,
         type: att.type,
       })),
-      createdAt: new Date().toISOString(),
+      // createdAt: new Date().toISOString(),
     };
 
+    const response = await axiosInstance.post(`/template/create`, {
+      template: JSON.stringify(template),
+    });
     console.log("Saving template:", template);
     setSnackbarMessage("Template saved successfully!");
     setShowSnackbar(true);
@@ -729,9 +733,9 @@ function EmailTemplateBuilder() {
   };
 
   return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
-      <Box sx={{ textAlign: "center", mb: 4 }}>
-        <EmailIcon sx={{ fontSize: 48, color: "primary.main", mb: 2 }} />
+    <Container maxWidth="xl" sx={{ py: 2 }}>
+      <Box sx={{ textAlign: "center", mb: 2 }}>
+        <EmailIcon sx={{ fontSize: 48, color: "primary.main", mb: 1 }} />
         <Typography variant="h4" component="h1" gutterBottom>
           Email Template Builder
         </Typography>
@@ -743,7 +747,7 @@ function EmailTemplateBuilder() {
 
       <Grid container spacing={3}>
         {/* Left Panel - Form Input */}
-        <Grid size={{xs:12 , md:5}}>
+        <Grid size={{ xs: 12, md: 5 }}>
           <Paper elevation={3} sx={{ p: 3, height: "fit-content" }}>
             <Stack
               direction="row"
@@ -1242,7 +1246,7 @@ function EmailTemplateBuilder() {
         </Grid>
 
         {/* Right Panel - Preview */}
-        <Grid size={{xs:12 , md:7}} width={"900px"}>
+        <Grid size={{ xs: 12, md: 7 }} width={"900px"}>
           <Paper
             elevation={3}
             sx={{ p: 3, position: isMobile ? "static" : "sticky", top: 20 }}
