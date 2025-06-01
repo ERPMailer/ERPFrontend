@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axiosInstance from "../../utils/axiosInstance";
 import {
   Box,
   TextField,
@@ -23,14 +24,17 @@ const CreateCampaign = () => {
     template.trim() !== '' &&
     (!schedule || scheduleTime.trim() !== '');
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const formData = {
       campaignName,
       template,
       schedule,
       scheduleTime: schedule ? scheduleTime : null,
     };
-    console.log('Form Submitted:', formData);
+    const response = await axiosInstance.post(`/campaign/create`, formData);
+        console.log("Saving campaign:", formData);
+        setSnackbarMessage("campaign saved successfully!");
+        setShowSnackbar(true);
     // TODO: handle actual form submission (e.g., API call)
   };
 
