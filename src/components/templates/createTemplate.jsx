@@ -511,6 +511,7 @@ function EmailTemplateBuilder() {
 
   // Save template
   const saveTemplate = async () => {
+    debugger
     if (!validateForm()) {
       setSnackbarMessage("Please fix the errors before saving");
       setShowSnackbar(true);
@@ -525,7 +526,7 @@ function EmailTemplateBuilder() {
       image: croppedImage,
       signature: croppedSignature,
       buttons: ctaButtons,
-      variables: variables,
+      variables: getAllUsedVariables(),
       attachments: attachments.map((att) => ({
         id: att.id,
         name: att.name,
