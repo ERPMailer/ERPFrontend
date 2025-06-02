@@ -734,7 +734,7 @@ function EmailTemplateBuilder() {
 
   return (
     <Container maxWidth="xl" sx={{ py: 2 }}>
-      <Box sx={{ textAlign: "center", mb: 2 }}>
+      <Box sx={{ textAlign: "center", mb: 1 }}>
         <EmailIcon sx={{ fontSize: 48, color: "primary.main", mb: 1 }} />
         <Typography variant="h4" component="h1" gutterBottom>
           Email Template Builder
