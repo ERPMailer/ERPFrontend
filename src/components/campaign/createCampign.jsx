@@ -23,24 +23,16 @@ import {
   TableRow,
   Paper,
   Snackbar,
-  Grid,
-  Tooltip,
-  Card,
-  Alert,
-  Chip
 } from "@mui/material";
 import CsvIcon from "@mui/icons-material/TableChart";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import CloseIcon from "@mui/icons-material/Close";
-import InfoIcon from "@mui/icons-material/Info";
-import AttachFileIcon from "@mui/icons-material/AttachFile";
 
 const CreateCampaign = () => {
   const [campaignName, setCampaignName] = useState("");
   const [template, setTemplate] = useState("");
   const [templateList, setTemplateList] = useState([]);
   const [templateVariables, setTemplateVariables] = useState([]);
-  const [templateData, setTemplateData] = useState(null);
   const [schedule, setSchedule] = useState(false);
   const [scheduleTime, setScheduleTime] = useState("");
   const [csvData, setCsvData] = useState([]);
@@ -62,7 +54,6 @@ const CreateCampaign = () => {
   useEffect(() => {
     const selected = templateList.find((t) => t._id === template);
     setTemplateVariables(selected?.variables || []);
-    setTemplateData(selected || null);
   }, [template]);
 
   const handleCsvUpload = (e) => {
@@ -139,122 +130,84 @@ const CreateCampaign = () => {
     template.trim() !== "" &&
     (!schedule || scheduleTime.trim() !== "");
 
-  const replaceVariables = (text) => {
-    if (!text || !templateVariables) return text;
-    let replaced = text;
-    templateVariables.forEach((v) => {
-      const regex = new RegExp(`{{\\s*${v}\\s*}}`, "g");
-      replaced = replaced.replace(regex, `Sample ${v}`);
-    });
-    return replaced;
-  };
-
   return (
-    <Grid container spacing={4} sx={{ p: 4 }}>
-      <Grid item xs={12} md={5}>
-        <Box>
-          <Typography variant="h5" mb={2}>Create Campaign</Typography>
+    <Box sx={{ p: 4, maxWidth: 600, mx: "auto" }}>
+      <Typography variant="h5" mb={2}>
+        Create Campaign
+      </Typography>
 
-          <FormControl fullWidth margin="normal">
-            <TextField
-              label="Campaign Name"
-              value={campaignName}
-              onChange={(e) => setCampaignName(e.target.value)}
-            />
-          </FormControl>
+      <FormControl fullWidth margin="normal">
+        <TextField
+          label="Campaign Name"
+          value={campaignName}
+          onChange={(e) => setCampaignName(e.target.value)}
+        />
+      </FormControl>
 
-          <FormControl fullWidth margin="normal">
-            <InputLabel id="template-label">Select Template</InputLabel>
-            <Select
-              labelId="template-label"
-              value={template}
-              label="Select Template"
-              onChange={(e) => setTemplate(e.target.value)}
-            >
-              {templateList.map((tpl) => (
-                <MenuItem key={tpl._id} value={tpl._id}>
-                  {tpl.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+      <FormControl fullWidth margin="normal">
+        <InputLabel id="template-label">Select Template</InputLabel>
+        <Select
+          labelId="template-label"
+          value={template}
+          label="Select Template"
+          onChange={(e) => setTemplate(e.target.value)}
+        >
+          {templateList.map((tpl) => (
+            <MenuItem key={tpl._id} value={tpl._id}>
+              {tpl.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
 
-          <FormControlLabel
-            control={<Checkbox checked={schedule} onChange={(e) => setSchedule(e.target.checked)} />}
-            label="Schedule?"
+      <FormControlLabel
+        control={<Checkbox checked={schedule} onChange={(e) => setSchedule(e.target.checked)} />}
+        label="Schedule?"
+      />
+
+      {schedule && (
+        <FormControl fullWidth margin="normal">
+          <TextField
+            label="Schedule Time"
+            type="time"
+            InputLabelProps={{ shrink: true }}
+            value={scheduleTime}
+            onChange={(e) => setScheduleTime(e.target.value)}
           />
+        </FormControl>
+      )}
 
-          {schedule && (
-            <FormControl fullWidth margin="normal">
-              <TextField
-                label="Schedule Time"
-                type="time"
-                InputLabelProps={{ shrink: true }}
-                value={scheduleTime}
-                onChange={(e) => setScheduleTime(e.target.value)}
-              />
-            </FormControl>
-          )}
+      <Box display="flex" justifyContent="space-between" mt={2}>
+        <Button
+          variant="outlined"
+          startIcon={<CsvIcon />}
+          disabled={!template || templateVariables.length === 0}
+          onClick={downloadCSVTemplate}
+        >
+          Download CSV
+        </Button>
 
-          <Box display="flex" justifyContent="space-between" mt={2}>
-            <Button
-              variant="outlined"
-              startIcon={<CsvIcon />}
-              disabled={!template || templateVariables.length === 0}
-              onClick={downloadCSVTemplate}
-            >
-              Download CSV
-            </Button>
+        <Button
+          variant="outlined"
+          component="label"
+          startIcon={<UploadFileIcon />}
+          disabled={!template || templateVariables.length === 0}
+        >
+          Upload CSV
+          <input type="file" accept=".csv" hidden onChange={handleCsvUpload} />
+        </Button>
+      </Box>
 
-            <Button
-              variant="outlined"
-              component="label"
-              startIcon={<UploadFileIcon />}
-              disabled={!template || templateVariables.length === 0}
-            >
-              Upload CSV
-              <input type="file" accept=".csv" hidden onChange={handleCsvUpload} />
-            </Button>
-          </Box>
-
-          <Button
-            variant="contained"
-            color="primary"
-            fullWidth
-            sx={{ mt: 3 }}
-            onClick={handleSubmit}
-            disabled={!isFormValid}
-          >
-            Submit
-          </Button>
-        </Box>
-      </Grid>
-
-      <Grid item xs={12} md={7}>
-        <Paper elevation={3} sx={{ p: 3 }}>
-          <Typography variant="h6" gutterBottom>
-            Live Preview
-          </Typography>
-          {templateData ? (
-            <Card sx={{ p: 2 }}>
-              <Typography variant="subtitle1" fontWeight="bold">
-                {replaceVariables(templateData.name)}
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                Subject: {replaceVariables(templateData.subject)}
-              </Typography>
-              <Box
-                sx={{ mt: 2 }}
-                dangerouslySetInnerHTML={{
-                  __html: replaceVariables(templateData.body || ""),
-                }}
-              />
-            </Card>
-          ) : (
-            <Alert severity="info">Select a template to preview.</Alert>
-          )}
-        </Paper>
-      </Grid>
+      <Button
+        variant="contained"
+        color="primary"
+        fullWidth
+        sx={{ mt: 3 }}
+        onClick={handleSubmit}
+        disabled={!isFormValid}
+      >
+        Submit
+      </Button>
 
       <Dialog open={csvDialogOpen} onClose={() => setCsvDialogOpen(false)} fullWidth maxWidth="md">
         <DialogTitle>
@@ -297,7 +250,7 @@ const CreateCampaign = () => {
         onClose={() => setShowSnackbar(false)}
         message={snackbarMessage}
       />
-    </Grid>
+    </Box>
   );
 };
 
