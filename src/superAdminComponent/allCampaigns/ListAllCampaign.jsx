@@ -1,6 +1,7 @@
-import axiosInstance from "../utils/axiosInstance";
+import { MainCard } from "../../components/style/styleComponent";
+import axiosInstance from "../../utils/axiosInstance";
 
-export default function ListCampaign() {
+export default function ListAllCampaign() {
   const [campaign, setCampaign] = useState([]);
 
   const getAllCampaigns = async () => {
@@ -16,5 +17,9 @@ export default function ListCampaign() {
     getAllCampaigns();
   }, []);
 
-  return <div></div>;
+  return (
+    <MainCard>
+      <h1>All Campaigns</h1>
+    </MainCard>
+  );
 }

@@ -14,6 +14,8 @@ import { routes } from "./routes/routes";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
 import Navbar from "./components/navbar/navbar";
+import { Provider } from "react-redux";
+import store from "./store";
 
 // Create MUI theme
 const theme = createTheme({
@@ -56,14 +58,16 @@ function App() {
   const [count, setCount] = useState(0);
   const AppRoutes = () => useRoutes(routes);
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline /> {/* Resets MUI baseline styles */}
-      <Router>
-        {/* <Navbar /> */}
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline /> {/* Resets MUI baseline styles */}
+        <Router>
+          {/* <Navbar /> */}
 
-        <AppRoutes />
-      </Router>
-    </ThemeProvider>
+          <AppRoutes />
+        </Router>
+      </ThemeProvider>
+    </Provider>
   );
 }
 
