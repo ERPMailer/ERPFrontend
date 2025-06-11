@@ -13,6 +13,8 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { SUPER_ADMIN_NAVBAR, USER_NAVBAR } from "../../utils/allUnitNavbarOptions";
 
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -20,6 +22,12 @@ const settings = ["Profile", "Account", "Dashboard", "Logout"];
 function Navbar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const userData = useSelector(state => state.erpMailer.user)
+
+  console.log(userData)
+
+  const navbarOptions = userData.userRole === "superadmin" ? SUPER_ADMIN_NAVBAR : USER_NAVBAR
+
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
@@ -56,7 +64,7 @@ function Navbar() {
               textDecoration: "none",
             }}
           >
-            LOGO
+            LOGOdscv
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -86,9 +94,9 @@ function Navbar() {
               onClose={handleCloseNavMenu}
               sx={{ display: { xs: "block", md: "none" } }}
             >
-              {pages.map((page) => (
+              {navbarOptions.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography sx={{ textAlign: "center" }}>{page}</Typography>
+                  <Typography sx={{ textAlign: "center" }}>{page.name}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -110,18 +118,14 @@ function Navbar() {
               textDecoration: "none",
             }}
           >
-            LOGO
+            LOGOcvadscvas
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {page}
-              </Button>
-            ))}
+             {navbarOptions.map((page) => (
+                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                  <Typography sx={{ textAlign: "center" }}>{page.name}</Typography>
+                </MenuItem>
+              ))}
           </Box>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">

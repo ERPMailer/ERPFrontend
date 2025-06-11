@@ -16,7 +16,7 @@ export const SUPER_ADMIN_NAVBAR = [
   },
   {
     name: "help",
-    route: "/superadmin-dashboard",
+    route: "/superadmin-dashboard", 
     isVisible: true,
   },
 ];
