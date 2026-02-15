@@ -27,4 +27,15 @@ export const USER_NAVBAR = [
     route: "/dashboard",
     isVisible: true,
   },
+  {
+    name: "Campaigns",
+    route: "/campaigns",
+    isVisible: true,
+  },
+  {
+    name: "Templates",
+    route: "/templates",
+    isVisible: true,
+  },
+  
 ];

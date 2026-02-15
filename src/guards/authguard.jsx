@@ -11,9 +11,8 @@ export default function AuthGuard({ children }) {
 
   const authenticateUser = async () => {
     try {
-      debugger;
       const response = await axiosInstance.get(`/authenticate/user`);
-      dispatch(setUserData(response.data));
+      dispatch(setUserData(response.data.data));
     //  navigate(`/create-template`);
       // await validateUserAndItsRoute(response.data.userRole);
     } catch (error) {

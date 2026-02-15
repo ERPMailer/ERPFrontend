@@ -21,15 +21,25 @@ import store from "./store";
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#1976d2",
+      main: "#0d0d0d",
     },
     secondary: {
       main: "#9c27b0",
+      
+      
     },
     background: {
       default: "#f4f6f8",
+      
     },
+    common:{
+      black: "#000",
+      white: "#fff",
+      blue:"rgba(31, 123, 252, 0.87)"
+    }
+    
   },
+  
   typography: {
     fontFamily: "Roboto, sans-serif",
     h1: {

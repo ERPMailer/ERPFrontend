@@ -117,9 +117,9 @@ const Home = ({ toggleTheme, isDarkMode = false }) => {
 
       // Simulate redirect after success
       setTimeout(() => {
-        navigate(`/create-template`);
+        navigate(`/dashboard`);
         // window.location.href = '/dashboard';
-      }, 1500);
+      }, 500);
     } catch (error) {
       setAlert({
         type: "error",
@@ -146,7 +146,6 @@ const Home = ({ toggleTheme, isDarkMode = false }) => {
 
   const handleGoogleLogin = async () => {
     try {
-      debugger;
 
       const result = await signInWithPopup(auth, provider);
       const user = result.user;

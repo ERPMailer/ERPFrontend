@@ -53,6 +53,7 @@ import {
 } from "@mui/icons-material";
 import Cropper from "react-easy-crop";
 import axiosInstance from "../../utils/axiosInstance";
+import { useNavigate } from "react-router-dom";
 
 function EmailTemplateBuilder() {
   const theme = useTheme();
@@ -96,7 +97,10 @@ function EmailTemplateBuilder() {
   const [errors, setErrors] = useState({});
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const [isEditorFocused, setIsEditorFocused] = useState(false);
+
+  const navigate = useNavigate();
 
   // Extract variables from template content
   const extractVariables = (text) => {
@@ -511,37 +515,62 @@ function EmailTemplateBuilder() {
 
   // Save template
   const saveTemplate = async () => {
-    debugger
     if (!validateForm()) {
       setSnackbarMessage("Please fix the errors before saving");
+      setSnackbarSeverity("error");
       setShowSnackbar(true);
       return;
     }
 
-    const template = {
-      name: templateName,
-      subject: emailSubject,
-      message: messageBody,
-      footer: footerText,
-      image: croppedImage,
-      signature: croppedSignature,
-      buttons: ctaButtons,
-      variables: getAllUsedVariables(),
-      attachments: attachments.map((att) => ({
-        id: att.id,
-        name: att.name,
-        size: att.size,
-        type: att.type,
-      })),
-      // createdAt: new Date().toISOString(),
-    };
+    try {
+      const template = {
+        name: templateName,
+        subject: emailSubject,
+        message: messageBody,
+        footer: footerText,
+        image: croppedImage,
+        signature: croppedSignature,
+        buttons: ctaButtons,
+        variables: getAllUsedVariables(),
+        attachments: attachments.map((att) => ({
+          id: att.id,
+          name: att.name,
+          size: att.size,
+          type: att.type,
+        })),
+        // createdAt: new Date().toISOString(),
+      };
 
-    const response = await axiosInstance.post(`/template/create`, {
-      template: JSON.stringify(template),
-    });
-    console.log("Saving template:", template);
-    setSnackbarMessage("Template saved successfully!");
-    setShowSnackbar(true);
+      const response = await axiosInstance.post(`/template/create`, {
+        template: JSON.stringify(template),
+      });
+      
+      console.log("Template saved successfully:", response.data);
+      setSnackbarMessage("✓ Template created successfully!");
+      setSnackbarSeverity("success");
+      setShowSnackbar(true);
+      navigate('/templates')
+      
+      // Optional: Reset form after successful creation
+      // setTimeout(() => {
+      //   setTemplateName("");
+      //   setEmailSubject("");
+      //   setMessageBody("");
+      //   setFooterText("");
+      //   setCtaButtons([]);
+      //   setCroppedImage(null);
+      //   setCroppedSignature(null);
+      //   setAttachments([]);
+      // }, 1500);
+    } catch (error) {
+      console.error("Error saving template:", error);
+      const errorMessage = error.response?.data?.message || 
+                          error.message || 
+                          "Failed to create template. Please try again.";
+      setSnackbarMessage(`✗ ${errorMessage}`);
+      setSnackbarSeverity("error");
+      setShowSnackbar(true);
+    }
   };
 
   // Export to HTML
@@ -1715,13 +1744,22 @@ function EmailTemplateBuilder() {
         </DialogActions>
       </Dialog>
 
-      {/* Success Snackbar */}
+      {/* Snackbar Notification */}
       <Snackbar
         open={showSnackbar}
-        autoHideDuration={4000}
+        autoHideDuration={5000}
         onClose={() => setShowSnackbar(false)}
-        message={snackbarMessage}
-      />
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={() => setShowSnackbar(false)}
+          severity={snackbarSeverity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 }
