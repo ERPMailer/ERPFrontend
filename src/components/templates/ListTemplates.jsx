@@ -46,10 +46,14 @@ export default function ListTemplates() {
 
     // Fetch templates on component mount
     useEffect(() => {
-        fetchTemplates();
-    }, [paginationModel.page, paginationModel.pageSize]);
+        if (userData?._id) {
+            fetchTemplates();
+        }
+    }, [paginationModel.page, paginationModel.pageSize, userData?._id]);
 
-    const fetchTemplates = async () => {
+    const fetchTemplates = React.useCallback(async () => {
+        if (!userData?._id) return;
+
         try {
             setLoading(true);
             const response = await getAllTemplates(
@@ -70,7 +74,7 @@ export default function ListTemplates() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [userData?._id, paginationModel.page, paginationModel.pageSize]);
 
     // const handleDelete = async (templateId) => {
     //     if (!window.confirm("Are you sure you want to delete this template?")) {

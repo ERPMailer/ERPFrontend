@@ -16,5 +16,20 @@ const getAllTemplates = async(userId, page, limit)=>{
 }
 
 
+const getTemplateDataById = async(templateId)=>{
+    try {
+        const response = await axiosInstance.get(`/template`, {params:{templateId}});
+        return response.data;
+    } catch (error) {
+        if(error instanceof AxiosError){
+            const { response } = error;
+            throw response?.data?.message ?? error.message;
+        }else{
+             throw error?.message ?? error;
+        }
+    }
+}
 
-export { getAllTemplates };
+
+
+export { getAllTemplates, getTemplateDataById };
