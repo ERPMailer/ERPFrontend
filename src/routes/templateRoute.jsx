@@ -1,7 +1,8 @@
 import CreateTemplate from "../components/templates/createTemplate";
 import ListTemplates from "../components/templates/ListTemplates";
+import TemplateDetails from "../components/templates/templateDetails";
 
-export const tepmplateRouets = [
+export const templateRoutes = [
     {
         path: "/templates/create-template",
         element: <CreateTemplate />,
@@ -9,5 +10,9 @@ export const tepmplateRouets = [
     {
         path: "/templates",
         element: <ListTemplates />,
+    },
+    {
+        path: "/templates/:templateId",
+        element: <TemplateDetails />,
     },
 ];

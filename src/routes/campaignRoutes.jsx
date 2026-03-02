@@ -1,7 +1,7 @@
 import CampaignList from "../components/campaign/campaignList";
-import CreateCampaign from "../components/campaign/createCampign";
+import CreateCampaign from "../components/campaign/CreateCampaign";
 
-export const campaignRouets = [
+export const campaignRoutes = [
     {
         path: "/campaigns/create-campaign",
         element: <CreateCampaign />,

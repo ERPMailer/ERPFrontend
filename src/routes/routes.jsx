@@ -1,10 +1,10 @@
 import Home from "../components/home";
 import Layout from "../components/layout";
 import AuthGuard from "../guards/authguard";
-import { campaignRouets } from "./campaignRoutes";
-import { dashboardRouets } from "./dashboardRoutes";
+import { campaignRoutes } from "./campaignRoutes";
+import { dashboardRoutes } from "./dashboardRoutes";
 import { superAdminRoutes } from "./superAdminRoutes/superAdminRoutes";
-import { tepmplateRouets } from "./templateRoute";
+import { templateRoutes } from "./templateRoute";
 
 export const routes = [
   { path: "/", element: <Home /> },
@@ -16,9 +16,9 @@ export const routes = [
       </AuthGuard>
     ),
     children: [
-      ...campaignRouets,
-      ...dashboardRouets,
-      ...tepmplateRouets,
+      ...campaignRoutes,
+      ...dashboardRoutes,
+      ...templateRoutes,
       ...superAdminRoutes,
     ],
   },

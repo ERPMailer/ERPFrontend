@@ -1,6 +1,6 @@
 import Dashboard from "../components/dashboard/dashboard";
 
-export const dashboardRouets = [
+export const dashboardRoutes = [
     {
         path: "/dashboard",
         element: <Dashboard />,

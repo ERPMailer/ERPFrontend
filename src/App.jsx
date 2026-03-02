@@ -64,9 +64,10 @@ const theme = createTheme({
   },
 });
 
+const AppRoutes = () => useRoutes(routes);
+
 function App() {
   const [count, setCount] = useState(0);
-  const AppRoutes = () => useRoutes(routes);
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>

@@ -1,40 +1,52 @@
 import React from "react";
-import { Button } from "@mui/material";
+import { Button, alpha, useTheme } from "@mui/material";
 
 const ActionButton = ({
     icon: Icon,
     label,
     onClick,
     variant = "contained",
-    size,
+    color = "primary",
 }) => {
+    const theme = useTheme();
+    const mainColor = theme.palette[color]?.main || theme.palette.primary.main;
+    const darkColor = theme.palette[color]?.dark || theme.palette.primary.dark;
+
     return (
         <Button
             variant={variant}
-            startIcon={<Icon />}
+            startIcon={Icon && <Icon sx={{ fontSize: 20 }} />}
             onClick={onClick}
-            fullWidth
             sx={{
-                py: { xs: 1, md: 1 },
-                px: { xs: 1, md: 2 },
-                borderRadius: "8px",
+                py: 1.5,
+                px: 3,
+                borderRadius: "14px",
                 textTransform: "none",
-                fontWeight: 600,
-                fontSize: { xs: "0.850rem", md: "0.9rem" },
-                boxShadow:
-                    variant === "contained"
-                        ? "0 2px 8px rgba(99, 102, 241, 0.2)"
-                        : "none",
-                "@media (min-width: 600px)": {
-                    width: "auto",
-                    flex: { sm: "1 1 auto", md: "0 1 auto" },
-                },
-                "&:hover": {
-                    boxShadow:
-                        variant === "contained"
-                            ? "0 4px 12px rgba(99, 102, 241, 0.3)"
-                            : "none",
-                },
+                fontWeight: 800,
+                fontSize: "0.95rem",
+                letterSpacing: "0.3px",
+                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                ...(variant === "contained" ? {
+                    background: `linear-gradient(135deg, ${mainColor} 0%, ${darkColor} 100%)`,
+                    boxShadow: `0 8px 16px ${alpha(mainColor, 0.25)}`,
+                    border: "none",
+                    "&:hover": {
+                        transform: "translateY(-3px)",
+                        boxShadow: `0 12px 20px ${alpha(mainColor, 0.35)}`,
+                        background: `linear-gradient(135deg, ${mainColor} 0%, ${darkColor} 100%)`,
+                    }
+                } : {
+                    borderColor: alpha(mainColor, 0.3),
+                    color: mainColor,
+                    borderWidth: "2px",
+                    "&:hover": {
+                        borderWidth: "2px",
+                        borderColor: mainColor,
+                        bgcolor: alpha(mainColor, 0.04),
+                        transform: "translateY(-2px)",
+                    }
+                }),
+                width: { xs: "100%", sm: "auto" },
             }}
         >
             {label}
